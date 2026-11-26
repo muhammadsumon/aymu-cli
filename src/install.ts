@@ -8,7 +8,7 @@
 // Any refusal exits non-zero and leaves the project exactly as it was. The grant code, verifier and fetch key never
 // reach the output, the project or a log (`Io` output is redacted as well).
 import { INSTALL_GRANT_ENV, InstallGrantCode, type CliVerificationCode, CLI_VERIFICATION_CODES } from '@aymu/domain';
-import { RELEASE_LIMITS, MAX_MANIFEST_BYTES } from '@aymu/domain/manifest';
+import { RELEASE_LIMITS, MAX_MANIFEST_BYTES, integrationSteps } from '@aymu/domain/manifest';
 import { lstat, readdir } from 'node:fs/promises';
 import { basename, dirname, resolve } from 'node:path';
 import { type ConflictMode, type ItemPlan, commit, planItem } from './apply';
@@ -272,6 +272,8 @@ export async function runAdd(io: Io, args: AddArgs, deps: AddDeps = {}): Promise
       for (const d of m.dependencies) {
         if (!(d.name in (project as ProjectInfo).dependencies)) missingDeps.push(`${d.name}@${d.range}`);
       }
+      // ADR-181: a section with React islands also needs the integration registered in the buyer's astro.config.
+      for (const step of integrationSteps(m.dependencies)) if (!notes.includes(step)) notes.push(step);
       const entry = m.entrypoints.find((e) => e.kind === 'component');
       if (entry?.importPath) {
         notes.push(

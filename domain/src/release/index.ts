@@ -6,3 +6,4 @@ export * from './hashing';
 export * from './manifest';
 export * from './verify';
 export * from './lifecycle';
+export * from './integrations';

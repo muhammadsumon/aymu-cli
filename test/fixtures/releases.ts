@@ -86,7 +86,7 @@ function roleOf(p: string): string {
   const e = ext(p);
   if (e === '.astro') return 'component';
   if (e === '.css') return 'style';
-  if (['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs'].includes(e)) return 'script';
+  if (['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs', '.tsx', '.jsx'].includes(e)) return 'script';
   if (e === '.woff2' || e === '.woff') return 'font';
   if (MEDIA[e]) return 'image';
   if (['.md', '.mdx', '.txt', '.xml', '.webmanifest'].includes(e)) return 'asset';
@@ -111,6 +111,8 @@ export interface Tamper {
   requirements?: { astro: string | null; tailwindcss: string | null; node: string | null };
   /** Override the manifest's release identity fields. */
   release?: Record<string, unknown>;
+  /** Section dependencies (React islands declare @astrojs/react, react and react-dom). */
+  dependencies?: { name: string; range: string; type: 'dependencies' | 'dev_dependencies' }[];
 }
 
 export interface BuiltRelease {
@@ -154,7 +156,7 @@ export async function buildSection(t: Tamper = {}): Promise<BuiltRelease> {
   return finish(t, contents, {
     release,
     requirements: t.requirements ?? { astro: '>=7.4.13 <8', tailwindcss: '>=4.3.5 <5', node: null },
-    dependencies: [],
+    dependencies: t.dependencies ?? [],
     install: {
       mode: 'into_project',
       namespace: 'aymu',

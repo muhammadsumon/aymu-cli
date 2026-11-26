@@ -100,6 +100,8 @@ export const ALLOWED_EXTENSIONS = [
   '.js',
   '.mjs',
   '.cjs',
+  '.tsx',
+  '.jsx',
   '.css',
   '.md',
   '.mdx',
