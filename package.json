@@ -1,6 +1,6 @@
 {
   "name": "aymu",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "The Aymu customer installer: verifies signed, immutable releases and installs them into an Astro project safely.",
   "license": "MIT",
   "author": "Muhammad Sumon",
